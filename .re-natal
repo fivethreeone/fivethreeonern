@@ -1,0 +1,16 @@
+{
+  "name": "fivethreeonern",
+  "interface": "reagent6",
+  "androidHost": "localhost",
+  "iosHost": "localhost",
+  "envRoots": {
+    "dev": "env/dev",
+    "prod": "env/prod"
+  },
+  "modules": [
+    "react-native-sqlite-storage"
+  ],
+  "imageDirs": [
+    "images"
+  ]
+}
