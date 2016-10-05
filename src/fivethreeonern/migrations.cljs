@@ -7,23 +7,33 @@
 (declare run-migrations)
 
 (defn last-migration-id
-  []
-  (query "SELECT id FROM migrations ORDER BY id" (comp :id last)))
+  [cb]
+  (query "SELECT id FROM migrations ORDER BY id"
+         (fn [result]
+           (-> result last :id cb))))
 
 (defn insert-migration
-  [id rest-migrations]
+  [id rest-migrations cb]
   (query (gstring/subs "INSERT INTO migrations (id) VALUES (%s);" id)
          (fn [_]
            (if (empty? rest-migrations)
-             (prn "Migrations succeeded!")
-             (run-migrations rest-migrations)))))
+             (cb)
+             (run-migrations rest-migrations cb)))
+         (fn [error]
+           (js/console.log error))))
 
 (defn run-migrations
-  [[[id migration] & rest-migrations]]
+  [[[id migration] & rest-migrations] cb]
+  (js/console.log "running migration id" id)
   (query migration (fn [_]
-                     (insert-migration id rest-migrations))))
+                     (insert-migration id rest-migrations cb))))
 
 (defn migrate
-  [_]
-  (let [to-migrate-count (or (last-migration-id) 0)]
-    (run-migrations (map-indexed vector (drop to-migrate-count migrations)))))
+  [cb]
+  (last-migration-id
+   (fn [last-migration-id]
+     (js/console.log last-migration-id)
+     (let [to-migrate-count (or last-migration-id 0)]
+       (run-migrations (map-indexed vector
+                                    (drop to-migrate-count migrations))
+                       cb)))))
