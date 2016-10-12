@@ -12,15 +12,4 @@ public class MainActivity extends ReactActivity {
     protected String getMainComponentName() {
         return "fivethreeonern";
     }
-
-   /**
-   * A list of packages used by the app. If the app uses additional views
-   * or modules besides the default ones, add more packages here.
-   */
-    @Override
-    protected List<ReactPackage> getPackages() {
-      return Arrays.<ReactPackage>asList(
-        new SQLitePluginPackage(),   // register SQLite Plugin here
-        new MainReactPackage());
-    }
 }
