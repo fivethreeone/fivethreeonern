@@ -10,7 +10,7 @@
   (.executeSql tx query #js []
                (fn [tx results]
                  (if (empty? other-queries)
-                   (let [results (-> results .-rows .raw js->clj)]
+                   (let [results (-> results .-rows .raw (js->clj :keywordize-keys true))]
                      (final-cb results))
                    (execute-sql tx other-queries final-cb on-error)))
                on-error))
