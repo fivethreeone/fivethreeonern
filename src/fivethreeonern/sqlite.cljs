@@ -28,3 +28,8 @@
    (query query-str cb (fn [_])))
   ([query-str cb on-error]
    (transaction [query-str] cb on-error)))
+
+(defn log-query [query-str]
+  (query query-str (fn [result]
+                     (js/console.log "Query:" query-str)
+                     (js/console.log "Result:" (clj->js result)))))
